@@ -11,7 +11,7 @@ public class MyFIRSTJavaOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        telemetry.addData("Status", "Initialized");
+        telemetry.addData("Status", "Initialized1");
         telemetry.update();
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
