@@ -55,6 +55,32 @@ public class MecanumTeleOp extends LinearOpMode {
             frontRightMotor.setPower(frontRightPower);
             backRightMotor.setPower(backRightPower);
 
+            // Left bumper = turn 90 degrees left
+            //if (gamepad1.left_bumper && !lastLeftBumper) {
+               // targetHeading = heading + 90;
+           // }
+
+// Right bumper = turn 90 degrees right
+            //if (gamepad1.right_bumper && !lastRightBumper) {
+            //    targetHeading = heading - 90;
+            //}
+
+// Remember bumper state
+            lastLeftBumper = gamepad1.left_bumper;
+            lastRightBumper = gamepad1.right_bumper;
+
+            //double error = targetHeading - heading;
+
+// Fix wrap-around (359° -> 0° problem)
+            //if (error > 180) error -= 360;
+          //  if (error < -180) error += 360;
+
+          //  double turnPower = error * kP;
+
+// Limit power
+          //  turnPower = Math.max(-0.5, Math.min(0.5, turnPower));
+
+
             // Output data to the Driver Station screen for telemetry monitoring
             telemetry.addData("X position", x_pos);
             telemetry.addData("Y position", y_pos);
