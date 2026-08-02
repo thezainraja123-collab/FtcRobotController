@@ -56,6 +56,12 @@ public class MecanumTeleOp extends LinearOpMode {
             backRightMotor.setPower(backRightPower);
 
             // Output data to the Driver Station screen for telemetry monitoring
+            telemetry.addData("X position", x_pos);
+            telemetry.addData("Y position", y_pos);
+            telemetry.addData("Heading", heading);
+            telemetry.addLine("");
+            telemetry.addLine("-----------------------");
+            telemetry.addLine("");
             telemetry.addData("Stick Y (Drive)", y);
             telemetry.addData("Stick X (Strafe)", x);
             telemetry.addData("Stick RX (Rotate)", rx);
