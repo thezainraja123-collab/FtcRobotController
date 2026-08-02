@@ -26,6 +26,11 @@ public class MecanumTeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            pinpoint.update();
+
+            double heading = pinpoint.getPosition().getHeading(AngleUnit.DEGREES);
+            double x_pos = pinpoint.getPosX(DistanceUnit.INCH);
+            double y_pos = pinpoint.getPosY(DistanceUnit.INCH);
             // POV Mode: Left stick controls translation, right stick controls rotation
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed by default
             double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing kinematics
