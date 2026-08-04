@@ -9,7 +9,7 @@ public class telemetryTest extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        telemetry.addData("Hello", "world!");
+        telemetry.addData("Working", "True!");
         telemetry.update();
 
         waitForStart();
