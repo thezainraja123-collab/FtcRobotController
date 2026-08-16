@@ -240,6 +240,14 @@ As shown, the current OpMode will NOT appear on the driver station's OpMode list
   ``@Disabled`` annotation which has been included.
 This line can simply be deleted , or commented out, to make the OpMode visible.
 
+## HOW TO PUSH CODE TO CONTROL HUB
+
+1. Check code for errors or mistakes. If applicable, commit it to git as well.
+
+2. Plug one end of a USB-C to USB-C cord into the laptop (or device being coded on), 
+and plug the other into the control hub (on the robot).
+
+3. Connect to the robot WiFi. You'll need to turn on the robot for this to happen. 
 
 
 ## ADVANCED Multi-Team App management:  Cloning the TeamCode Module
