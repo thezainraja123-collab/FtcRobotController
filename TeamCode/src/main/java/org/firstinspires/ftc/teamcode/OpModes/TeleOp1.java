@@ -30,3 +30,7 @@ public class TeleOp1 extends LinearOpMode {
             drive.drive(forward, strafe, turn);
 
 }
+
+        drive.stop();
+    }
+}
