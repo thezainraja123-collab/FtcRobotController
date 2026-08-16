@@ -1,11 +1,16 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.opmodes.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@TeleOp(name = "Keyboard Motor Test", group = "Test Code Programs")
-public class hardwareTest extends LinearOpMode {
+/**
+ * Keyboard-style motor test: type a hardware config name using the gamepad,
+ * connect to it, and jog it. Handy for verifying config names on a fresh
+ * robot without writing a dedicated OpMode.
+ */
+@TeleOp(name = "Keyboard Motor Test", group = "Testing")
+public class HardwareTest extends LinearOpMode {
     @Override
     public void runOpMode() {
 

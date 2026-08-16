@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.utilities;
+package org.firstinspires.ftc.teamcode.robot;
 
 public class Constants {
 
@@ -22,6 +22,9 @@ public class Constants {
 
     public static final double DRIVE_KP = 0.02;
     public static final double TURN_KP = 0.01;
+
+    // Corrects for imperfect mecanum strafing kinematics
+    public static final double STRAFE_CORRECTION = 1.1;
 
 
     // =========================

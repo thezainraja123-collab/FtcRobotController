@@ -3,8 +3,72 @@
 Welcome!
 
 This module, TeamCode, is the place where you will write/paste the code for your team's
-robot controller App. This module is currently empty (a clean slate) but the
-process for adding OpModes is straightforward.
+robot controller App.
+
+## Folder Structure
+
+```
+teamcode/
+  robot/
+    Robot.java              <- wires up every subsystem, single init()/update()
+    Constants.java           <- hardware config names + tuning values
+    subsystems/
+      Drivetrain.java         <- mecanum motors, drive(y, x, rx)
+      Odometry.java            <- wraps the Pinpoint
+  opmodes/
+    common/
+      BaseTeleOp.java          <- shared driving + telemetry for every TeleOp
+    teleop/
+      MecanumTeleOp.java       <- the real competition/practice TeleOp
+    test/
+      PinpointTest.java        <- odometry sanity check
+      HardwareTest.java        <- keyboard motor jog tool
+  utilities/
+    TelemetryUtil.java        <- generic, hardware-agnostic helpers (telemetry formatting, etc)
+```
+
+The rule of thumb: **`robot/` is "what the robot has and how it moves", `opmodes/` is "what the
+driver picks on the Driver Station", `utilities/` is generic helpers that don't know or care what
+robot they're running on.**
+
+### Adding your own TeleOp
+
+Every driver-controlled OpMode should extend `BaseTeleOp` (in `opmodes/common/`) instead of
+starting from scratch. It already handles robot init, driving (left stick = move, right stick =
+turn), odometry updates, and telemetry every loop — so your driving feel is guaranteed to match
+every other TeleOp on the team.
+
+```java
+package org.firstinspires.ftc.teamcode.opmodes.teleop;
+
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import org.firstinspires.ftc.teamcode.opmodes.common.BaseTeleOp;
+
+@TeleOp(name = "My Experiment")
+public class MyExperiment extends BaseTeleOp {
+
+    @Override
+    protected void driverControls() {
+        // Called once per loop, after driving is already handled.
+        // robot is available here — try things out!
+    }
+}
+```
+
+Put it in `opmodes/teleop/` if it's meant to actually be driven at a match or practice, or
+`opmodes/test/` if it's just for poking at hardware. You can't accidentally break driving here —
+`driverControls()` runs after `BaseTeleOp` has already applied stick input to the drivetrain.
+
+### Adding a new mechanism (arm, intake, etc)
+
+1. Add its hardware config name to `robot/Constants.java`.
+2. Create a class for it under `robot/subsystems/`, following `Drivetrain.java`/`Odometry.java` as
+   a template — it owns its own motor/servo and exposes simple methods (`in()`, `out()`, `stop()`,
+   etc), not raw hardware objects.
+3. Add one field + one line to `robot/Robot.java`'s `init()` to wire it up.
+4. Call it from `driverControls()` in whichever TeleOp(s) should use it.
+
+That's the whole process — no other file needs to change.
 
 ## Creating your own OpModes
 
@@ -60,9 +124,16 @@ This is done inside Android Studio directly, using the following steps:
 
  2) Right click on the sample class and select "Copy"
 
- 3) Expand the  TeamCode/java folder 
+ 3) Expand the TeamCode/java folder
 
- 4) Right click on the org.firstinspires.ftc.teamcode folder and select "Paste"
+ 4) Right click on the folder that matches the sample's purpose and select "Paste":
+      - A driver-controlled sample (drives the robot)?  Consider rewriting it to extend
+        `BaseTeleOp` instead (see "Adding your own TeleOp" above) so it shares driving code
+        with the rest of the team. Otherwise paste into `opmodes/teleop/`.
+      - A sensor/concept demo you're just experimenting with, not driving a robot?
+        Paste into `opmodes/test/`.
+      - Not an OpMode at all (a helper class)?  It probably belongs in `utilities/` if it's
+        generic, or `robot/subsystems/` if it wraps a piece of hardware.
 
  5) You will be prompted for a class name for the copy.
     Choose something meaningful based on the purpose of this class.
