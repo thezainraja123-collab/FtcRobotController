@@ -11,6 +11,7 @@ robot controller App.
 teamcode/
   robot/
     Robot.java              <- wires up every subsystem, single init()/update()
+                                also has driveToPosition()/turnToHeading() for autonomous
     Constants.java           <- hardware config names + tuning values
     subsystems/
       Drivetrain.java         <- mecanum motors, drive(y, x, rx)
@@ -18,8 +19,11 @@ teamcode/
   opmodes/
     common/
       BaseTeleOp.java          <- shared driving + telemetry for every TeleOp
+      BaseAutonomous.java      <- shared init + hand-off for every Autonomous
     teleop/
       MecanumTeleOp.java       <- the real competition/practice TeleOp
+    auto/
+      DriveForwardAuto.java    <- simplest possible autonomous (drive forward 1s)
     test/
       PinpointTest.java        <- odometry sanity check
       HardwareTest.java        <- keyboard motor jog tool
@@ -59,6 +63,34 @@ Put it in `opmodes/teleop/` if it's meant to actually be driven at a match or pr
 `opmodes/test/` if it's just for poking at hardware. You can't accidentally break driving here —
 `driverControls()` runs after `BaseTeleOp` has already applied stick input to the drivetrain.
 
+### Adding your own Autonomous
+
+Every Autonomous OpMode should extend `BaseAutonomous` (in `opmodes/common/`). It handles robot
+init and waiting for start, then calls `runRoutine()` once — autonomous doesn't loop reading
+gamepad input like TeleOp does, so just write your steps top to bottom:
+
+```java
+package org.firstinspires.ftc.teamcode.opmodes.auto;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import org.firstinspires.ftc.teamcode.opmodes.common.BaseAutonomous;
+
+@Autonomous(name = "My Auto")
+public class MyAuto extends BaseAutonomous {
+
+    @Override
+    protected void runRoutine() {
+        robot.drivetrain.drive(0.5, 0, 0);
+        sleep(1000);
+        robot.drivetrain.stop();
+    }
+}
+```
+
+For anything beyond timed movement, `Robot` also has `driveToPosition(this, x, y, power)` and
+`turnToHeading(this, heading, power)` — both block until the robot reaches the target (using the
+Pinpoint + the `kP`/tolerance values in `Constants.java`). Put your routine in `opmodes/auto/`.
+
 ### Adding a new mechanism (arm, intake, etc)
 
 1. Add its hardware config name to `robot/Constants.java`.
@@ -66,7 +98,8 @@ Put it in `opmodes/teleop/` if it's meant to actually be driven at a match or pr
    a template — it owns its own motor/servo and exposes simple methods (`in()`, `out()`, `stop()`,
    etc), not raw hardware objects.
 3. Add one field + one line to `robot/Robot.java`'s `init()` to wire it up.
-4. Call it from `driverControls()` in whichever TeleOp(s) should use it.
+4. Call it from `driverControls()` in whichever TeleOp(s) should use it, or from `runRoutine()` in
+   whichever Autonomous(s) should use it.
 
 That's the whole process — no other file needs to change.
 
@@ -127,9 +160,12 @@ This is done inside Android Studio directly, using the following steps:
  3) Expand the TeamCode/java folder
 
  4) Right click on the folder that matches the sample's purpose and select "Paste":
-      - A driver-controlled sample (drives the robot)?  Consider rewriting it to extend
-        `BaseTeleOp` instead (see "Adding your own TeleOp" above) so it shares driving code
-        with the rest of the team. Otherwise paste into `opmodes/teleop/`.
+      - A driver-controlled sample (drives the robot with gamepad input)?  Consider rewriting it
+        to extend `BaseTeleOp` instead (see "Adding your own TeleOp" above) so it shares driving
+        code with the rest of the team. Otherwise paste into `opmodes/teleop/`.
+      - An autonomous sample (runs on its own, no gamepad)?  Consider rewriting it to extend
+        `BaseAutonomous` instead (see "Adding your own Autonomous" above). Otherwise paste into
+        `opmodes/auto/`.
       - A sensor/concept demo you're just experimenting with, not driving a robot?
         Paste into `opmodes/test/`.
       - Not an OpMode at all (a helper class)?  It probably belongs in `utilities/` if it's
