@@ -4,7 +4,6 @@ import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.Constants;
 
 /**
@@ -28,12 +27,14 @@ public class Odometry {
         pinpoint.resetPosAndIMU();
     }
 
+    /** @return X position, in Constants.ODOMETRY_UNIT */
     public double getX() {
-        return pinpoint.getPosX(DistanceUnit.INCH);
+        return pinpoint.getPosX(Constants.ODOMETRY_UNIT);
     }
 
+    /** @return Y position, in Constants.ODOMETRY_UNIT */
     public double getY() {
-        return pinpoint.getPosY(DistanceUnit.INCH);
+        return pinpoint.getPosY(Constants.ODOMETRY_UNIT);
     }
 
     public double getHeading() {

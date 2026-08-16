@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 public class Constants {
 
 
@@ -31,7 +33,17 @@ public class Constants {
     // Drive Tolerances
     // =========================
 
-    public static final double POSITION_TOLERANCE = 1.0; // inches
+    public static final double POSITION_TOLERANCE = 1.0;
     public static final double HEADING_TOLERANCE = 5.0;  // degrees
+
+
+    // =========================
+    // Units
+    // =========================
+
+    // Odometry position (Odometry.getX()/getY(), Robot.driveToPosition(),
+    // POSITION_TOLERANCE) is always reported/measured in this unit. Change
+    // this single line to change it everywhere.
+    public static final DistanceUnit ODOMETRY_UNIT = DistanceUnit.INCH;
 
 }

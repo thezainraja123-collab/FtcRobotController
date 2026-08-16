@@ -26,10 +26,15 @@ public class Robot {
     }
 
     /**
-     * Drives toward (targetX, targetY), in inches, using simple proportional
-     * control on the Pinpoint position. Blocks until within
-     * Constants.POSITION_TOLERANCE. Assumes the robot is roughly facing the
-     * field's X/Y axes; it does not correct for heading.
+     * Drives toward (targetX, targetY) using simple proportional control on
+     * the Pinpoint position. Blocks until within Constants.POSITION_TOLERANCE.
+     * Assumes the robot is roughly facing the field's X/Y axes; it does not
+     * correct for heading.
+     *
+     * @param opMode  the calling LinearOpMode, used to check opModeIsActive()
+     * @param targetX target X position, in Constants.ODOMETRY_UNIT
+     * @param targetY target Y position, in Constants.ODOMETRY_UNIT
+     * @param power   max drive power to apply, 0.0-1.0
      */
     public void driveToPosition(LinearOpMode opMode, double targetX, double targetY, double power) {
         while (opMode.opModeIsActive()) {
@@ -50,8 +55,12 @@ public class Robot {
     }
 
     /**
-     * Turns to face targetHeading, in degrees, using simple proportional
-     * control. Blocks until within Constants.HEADING_TOLERANCE.
+     * Turns to face targetHeading using simple proportional control. Blocks
+     * until within Constants.HEADING_TOLERANCE.
+     *
+     * @param opMode        the calling LinearOpMode, used to check opModeIsActive()
+     * @param targetHeading target heading, in degrees
+     * @param power         max turn power to apply, 0.0-1.0
      */
     public void turnToHeading(LinearOpMode opMode, double targetHeading, double power) {
         while (opMode.opModeIsActive()) {
