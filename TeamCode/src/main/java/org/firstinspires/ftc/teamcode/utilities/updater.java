@@ -8,19 +8,19 @@ package org.firstinspires.ftc.teamcode.utilities;
 
  LOG ALL UPDATES/ADDITIONS HERE:
  8-3-26: Class created, added pinpoint updater
+ 8-15-26: Pinpoint works, is successfully updated and works when called within a loop.
 
 */
-
-import org.firstinspires.ftc.teamcode.utilities.RobotHardware;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 
 public class updater {
 
-    GoBildaPinpointDriver pinpoint;
+    static GoBildaPinpointDriver pinpoint;
 
-    public void update() {
-        
+    public static void update() {
+
         pinpoint.update();
+
     }
 }
