@@ -249,6 +249,12 @@ and plug the other into the control hub (on the robot).
 
 3. Connect to the robot WiFi. You'll need to turn on the robot for this to happen. 
 
+4. **IMPORTANT**: Enter this command into terminal:
+   `~/Library/Android/sdk/platform-tools/adb connect 192.168.43.1:5555`
+
+5. You should now be connected, and see Control Hub vX.X in the top of the Android Studio
+Window. If not, enter the command again, and wait a bit. Then try disconnecting from WiFi
+and reconnecting.
 
 ## ADVANCED Multi-Team App management:  Cloning the TeamCode Module
 
