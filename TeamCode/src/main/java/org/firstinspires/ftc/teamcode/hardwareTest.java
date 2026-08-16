@@ -6,15 +6,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "Keyboard Motor Test", group = "Test Code Programs")
 public class hardwareTest extends LinearOpMode {
-
     @Override
     public void runOpMode() {
 
         String motorName = "";
 
         double turnSpeed = 0.5;
-
         boolean shift = false;
+
         boolean numberMode = false;
 
         int selected = 0;
@@ -159,7 +158,6 @@ public class hardwareTest extends LinearOpMode {
 
 
             telemetry.addLine("Keyboard Motor Test");
-            telemetry.addLine("------------------");
 
             telemetry.addData("Motor Name", motorName);
             telemetry.addData("Selected Key", keyboard[selected]);
@@ -195,9 +193,7 @@ public class hardwareTest extends LinearOpMode {
             telemetry.addLine("Y = Shift");
             telemetry.addLine("RB = Numbers");
 
-
             telemetry.update();
-
 
             lastA = gamepad1.a;
             lastB = gamepad1.b;

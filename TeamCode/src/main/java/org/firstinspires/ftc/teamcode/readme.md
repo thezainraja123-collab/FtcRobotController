@@ -60,7 +60,7 @@ This is done inside Android Studio directly, using the following steps:
 
  2) Right click on the sample class and select "Copy"
 
- 3) Expand the  TeamCode/java folder
+ 3) Expand the  TeamCode/java folder 
 
  4) Right click on the org.firstinspires.ftc.teamcode folder and select "Paste"
 
