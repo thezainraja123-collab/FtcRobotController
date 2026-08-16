@@ -24,6 +24,7 @@ teamcode/
       MecanumTeleOp.java       <- the real competition/practice TeleOp
     auto/
       DriveForwardAuto.java    <- simplest possible autonomous (drive forward 1s)
+      DriveToPositionAuto.java <- exercises driveToPosition()/turnToHeading()
     test/
       PinpointTest.java        <- odometry sanity check
       HardwareTest.java        <- keyboard motor jog tool
@@ -87,9 +88,22 @@ public class MyAuto extends BaseAutonomous {
 }
 ```
 
-For anything beyond timed movement, `Robot` also has `driveToPosition(this, x, y, power)` and
-`turnToHeading(this, heading, power)` — both block until the robot reaches the target (using the
-Pinpoint + the `kP`/tolerance values in `Constants.java`). Put your routine in `opmodes/auto/`.
+For anything beyond timed movement, `Robot` also has `driveToPositionStep(x, y, power)` and
+`turnToHeadingStep(heading, power)` — each runs **one step** of proportional control (using the
+Pinpoint + the `kP`/tolerance values in `Constants.java`) and returns `true` while it's still
+moving. You own the loop, the same shape as everywhere else in this codebase:
+
+```java
+while (opModeIsActive() && robot.driveToPositionStep(0, 24, 0.5)) {
+    telemetry.addData("X", robot.odometry.getX());
+    telemetry.addData("Y", robot.odometry.getY());
+    telemetry.update();
+}
+```
+
+`Robot` never touches `telemetry` or checks `opModeIsActive()` itself — those belong to the OpMode,
+which already has them. This also means you get live telemetry (visible on FTC Dashboard) for free
+while the robot is still moving, not just before/after. Put your routine in `opmodes/auto/`.
 
 ### Adding a new mechanism (arm, intake, etc)
 
@@ -102,6 +116,37 @@ Pinpoint + the `kP`/tolerance values in `Constants.java`). Put your routine in `
    whichever Autonomous(s) should use it.
 
 That's the whole process — no other file needs to change.
+
+## FTC Dashboard
+
+[FTC Dashboard](https://acmerobotics.github.io/ftc-dashboard/) is a web page that connects to
+the robot over WiFi and gives you three things: live telemetry graphs, a live field view (robot
+pose), and **live-editable tuning values** — no rebuild/redeploy needed while iterating.
+
+To connect: put the robot in Init or Run, join the robot's WiFi network from your laptop, then
+open a browser to:
+- `192.168.43.1:8080/dash` (Control Hub), or
+- `192.168.49.1:8080/dash` (phone RC)
+
+**How our telemetry gets there:** `BaseTeleOp` and `BaseAutonomous` both wrap `telemetry` in a
+`MultipleTelemetry` at the top of `runOpMode()`, so every `telemetry.addData()`/`update()` call —
+whether it's in the base class or your own `driverControls()`/`runRoutine()` override — goes to
+both the Driver Station and the Dashboard automatically. You don't need to do anything extra.
+
+**Live-tuning `Constants.java`:** the class is annotated `@Config`, and its tunable fields
+(`DRIVE_KP`, `TURN_KP`, `STRAFE_CORRECTION`, `POSITION_TOLERANCE`, `HEADING_TOLERANCE`) are
+`public static` (not `final`) specifically so the Dashboard can edit them live. Drag a slider,
+watch `DriveToPositionAuto` behave differently immediately. **Dashboard edits do NOT persist** —
+they reset to whatever's in the source file the next time the app restarts. Once you've found a
+value you like, copy it back into `Constants.java` or it's gone.
+
+If you add your own tunable values to a subsystem class later, follow the same pattern: make the
+field `public static` (not `final`) and put `@Config` on the class.
+
+We only run FTC Dashboard, not the "Panels" library also present in this project's dependencies —
+Panels is meant specifically for tuning Pedro Pathing's path-following controllers, which we don't
+use yet. If that changes, Panels is the one to wire up for tuning those specifically; FTC Dashboard
+stays for everything else.
 
 ## Creating your own OpModes
 

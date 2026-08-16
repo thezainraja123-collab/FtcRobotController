@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.common;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -17,6 +19,10 @@ public abstract class BaseAutonomous extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        // Sends every telemetry.addData()/update() call to BOTH the Driver
+        // Station and FTC Dashboard, instead of just the Driver Station.
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         robot = new Robot();
         robot.init(hardwareMap);
 

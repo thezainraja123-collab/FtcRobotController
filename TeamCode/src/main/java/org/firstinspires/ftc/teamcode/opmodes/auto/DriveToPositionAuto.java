@@ -13,7 +13,15 @@ public class DriveToPositionAuto extends BaseAutonomous {
 
     @Override
     protected void runRoutine() {
-        robot.driveToPosition(this, 0, 24, 0.5);
-        robot.turnToHeading(this, 90, 0.5);
+        while (opModeIsActive() && robot.driveToPositionStep(0, 24, 0.5)) {
+            telemetry.addData("X", robot.odometry.getX());
+            telemetry.addData("Y", robot.odometry.getY());
+            telemetry.update();
+        }
+
+        while (opModeIsActive() && robot.turnToHeadingStep(90, 0.5)) {
+            telemetry.addData("Heading", robot.odometry.getHeading());
+            telemetry.update();
+        }
     }
 }

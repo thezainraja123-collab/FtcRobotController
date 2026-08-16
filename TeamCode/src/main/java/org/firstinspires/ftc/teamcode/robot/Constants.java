@@ -1,7 +1,14 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+// @Config makes every public static (non-final) field below live-editable
+// from FTC Dashboard's browser UI while the robot is running. Edits do NOT
+// persist across an app restart -- once you find a good value on the
+// Dashboard, copy it back into this file.
+@Config
 public class Constants {
 
 
@@ -22,26 +29,26 @@ public class Constants {
     // Drive Tuning
     // =========================
 
-    public static final double DRIVE_KP = 0.02;
-    public static final double TURN_KP = 0.01;
+    public static double DRIVE_KP = 0.02;
+    public static double TURN_KP = 0.01;
 
     // Corrects for imperfect mecanum strafing kinematics
-    public static final double STRAFE_CORRECTION = 1.1;
+    public static double STRAFE_CORRECTION = 1.1;
 
 
     // =========================
     // Drive Tolerances
     // =========================
 
-    public static final double POSITION_TOLERANCE = 1.0;
-    public static final double HEADING_TOLERANCE = 5.0;  // degrees
+    public static double POSITION_TOLERANCE = 1.0;
+    public static double HEADING_TOLERANCE = 5.0;  // degrees
 
 
     // =========================
     // Units
     // =========================
 
-    // Odometry position (Odometry.getX()/getY(), Robot.driveToPosition(),
+    // Odometry position (Odometry.getX()/getY(), Robot.driveToPositionStep(),
     // POSITION_TOLERANCE) is always reported/measured in this unit. Change
     // this single line to change it everywhere.
     public static final DistanceUnit ODOMETRY_UNIT = DistanceUnit.INCH;

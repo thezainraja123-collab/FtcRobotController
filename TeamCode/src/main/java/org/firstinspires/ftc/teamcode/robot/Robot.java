@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.robot;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.robot.subsystems.Drivetrain;
@@ -26,58 +25,58 @@ public class Robot {
     }
 
     /**
-     * Drives toward (targetX, targetY) using simple proportional control on
-     * the Pinpoint position. Blocks until within Constants.POSITION_TOLERANCE.
-     * Assumes the robot is roughly facing the field's X/Y axes; it does not
-     * correct for heading.
+     * Runs one step of proportional control driving toward (targetX, targetY).
+     * Call this repeatedly from your own loop until it returns false. Assumes
+     * the robot is roughly facing the field's X/Y axes; it does not correct
+     * for heading.
      *
-     * @param opMode  the calling LinearOpMode, used to check opModeIsActive()
      * @param targetX target X position, in Constants.ODOMETRY_UNIT
      * @param targetY target Y position, in Constants.ODOMETRY_UNIT
      * @param power   max drive power to apply, 0.0-1.0
+     * @return true if still moving toward the target; false once within
+     *         Constants.POSITION_TOLERANCE (drivetrain has already been stopped)
      */
-    public void driveToPosition(LinearOpMode opMode, double targetX, double targetY, double power) {
-        while (opMode.opModeIsActive()) {
-            update();
+    public boolean driveToPositionStep(double targetX, double targetY, double power) {
+        update();
 
-            double errorX = targetX - odometry.getX();
-            double errorY = targetY - odometry.getY();
+        double errorX = targetX - odometry.getX();
+        double errorY = targetY - odometry.getY();
 
-            if (Math.hypot(errorX, errorY) < Constants.POSITION_TOLERANCE) {
-                break;
-            }
-
-            double y = clamp(errorY * Constants.DRIVE_KP, -power, power);
-            double x = clamp(errorX * Constants.DRIVE_KP, -power, power);
-            drivetrain.drive(y, x, 0);
+        if (Math.hypot(errorX, errorY) < Constants.POSITION_TOLERANCE) {
+            drivetrain.stop();
+            return false;
         }
-        drivetrain.stop();
+
+        double y = clamp(errorY * Constants.DRIVE_KP, -power, power);
+        double x = clamp(errorX * Constants.DRIVE_KP, -power, power);
+        drivetrain.drive(y, x, 0);
+        return true;
     }
 
     /**
-     * Turns to face targetHeading using simple proportional control. Blocks
-     * until within Constants.HEADING_TOLERANCE.
+     * Runs one step of proportional control turning to face targetHeading.
+     * Call this repeatedly from your own loop until it returns false.
      *
-     * @param opMode        the calling LinearOpMode, used to check opModeIsActive()
      * @param targetHeading target heading, in degrees
      * @param power         max turn power to apply, 0.0-1.0
+     * @return true if still turning toward the target; false once within
+     *         Constants.HEADING_TOLERANCE (drivetrain has already been stopped)
      */
-    public void turnToHeading(LinearOpMode opMode, double targetHeading, double power) {
-        while (opMode.opModeIsActive()) {
-            update();
+    public boolean turnToHeadingStep(double targetHeading, double power) {
+        update();
 
-            double error = targetHeading - odometry.getHeading();
-            while (error > 180) error -= 360;
-            while (error < -180) error += 360;
+        double error = targetHeading - odometry.getHeading();
+        while (error > 180) error -= 360;
+        while (error < -180) error += 360;
 
-            if (Math.abs(error) < Constants.HEADING_TOLERANCE) {
-                break;
-            }
-
-            double rx = clamp(error * Constants.TURN_KP, -power, power);
-            drivetrain.drive(0, 0, rx);
+        if (Math.abs(error) < Constants.HEADING_TOLERANCE) {
+            drivetrain.stop();
+            return false;
         }
-        drivetrain.stop();
+
+        double rx = clamp(error * Constants.TURN_KP, -power, power);
+        drivetrain.drive(0, 0, rx);
+        return true;
     }
 
     private double clamp(double value, double min, double max) {
